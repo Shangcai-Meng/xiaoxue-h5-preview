@@ -1,0 +1,23 @@
+{
+  "name": "tm3",
+  "version": "1.0.0",
+  "description": "UniApp快速开发模板",
+  "scripts": {
+    "dev:h5": "uni",
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "dev:app": "uni -p app",
+    "build:h5": "uni build",
+    "build:mp-weixin": "uni build -p mp-weixin",
+    "build:app": "uni build -p app"
+  },
+  "dependencies": {
+    "@climblee/uv-ui": "^1.1.20",
+    "luch-request": "^3.1.1",
+    "pinia": "^2.1.7",
+    "pinia-plugin-persistedstate": "^4.2.0"
+  },
+  "devDependencies": {
+    "sass": "^1.83.0",
+    "sass-loader": "^13.3.2"
+  }
+}

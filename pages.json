@@ -1,0 +1,113 @@
+{
+	"easycom": {
+		"autoscan": true,
+		"custom": {
+			"^uv-(.*)": "@climblee/uv-ui/components/uv-$1/uv-$1.vue"
+		}
+	},
+	"pages": [
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/team/index",
+			"style": {
+				"navigationBarTitleText": "团队",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/options/index",
+			"style": {
+				"navigationBarTitleText": "期权合约"
+			}
+		},
+		{
+			"path": "pages/user/index",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		}
+	],
+	"subpackages": [
+		{
+			"root": "pages/common",
+			"pages": [
+				{
+					"path": "richtext",
+					"style": {
+						"navigationStyle": "custom"
+					}
+				},
+				{
+					"path": "list-example",
+					"style":{
+						"navigationStyle": "custom"
+					}
+				}
+			]
+		},
+		{
+			"root": "pages/userSub",
+			"pages": [
+				{
+					"path": "profile",
+					"style": {
+						"navigationBarTitleText": "用户详情"
+					}
+				}
+			]
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "TM3",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"bounce": "none"
+		}
+	},
+	"tabBar": {
+		"borderStyle": "#eaeaea",
+		"color": "#9b9b9b",
+		"selectedColor": "#ff7f32",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/index/index",
+				"text": "首页",
+				"iconPath": "static/tabbar/sy2.png",
+				"selectedIconPath": "static/tabbar/sy1.png"
+			},
+			{
+				"pagePath": "pages/team/index",
+				"text": "团队",
+				"iconPath": "static/tabbar/td2.png",
+				"selectedIconPath": "static/tabbar/td1.png"
+			},
+			{
+				"pagePath": "pages/options/index",
+				"text": "期权",
+				"iconPath": "static/tabbar/qq2.png",
+				"selectedIconPath": "static/tabbar/qq1.png"
+			},
+			{
+				"pagePath": "pages/mine/index",
+				"text": "我的",
+				"iconPath": "static/tabbar/wd2.png",
+				"selectedIconPath": "static/tabbar/wd1.png"
+			}
+		]
+	}
+}
