@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@climblee/uv-ui": "^1.1.20",
+    "echarts": "^6.0.0",
     "luch-request": "^3.1.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "4.2.0"

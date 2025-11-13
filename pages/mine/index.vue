@@ -1,94 +1,131 @@
 <template>
   <view class="page">
-    <scroll-view scroll-y class="scroll" enable-flex>
+    <!-- 顶部导航栏 - 固定定位悬浮 -->
+    <uv-navbar
+      :placeholder="false"
+      :autoBack="false"
+      leftIconSize="0"
+      :bgColor="navbarBgColor"
+      :fixed="true"
+    >
+      <template #right>
+        <LanguageToggle />
+      </template>
+    </uv-navbar>
+
+    <scroll-view scroll-y class="scroll" enable-flex @scroll="handleScroll">
+      <!-- 导航栏占位 -->
+      <view class="navbar-placeholder"></view>
+
       <image class="hero-bg" :src="heroBg" mode="aspectFill" />
 
       <view class="container">
+        <!-- 顶部用户信息 -->
         <view class="header-card">
           <view class="header-main">
             <view class="wallet-info">
               <image class="avatar" :src="walletInfo.avatar" mode="aspectFill" />
               <view class="wallet-text">
                 <text class="wallet-id">{{ walletInfo.address }}</text>
-                <view class="vip-icon">
+                <view class="vip-badge">
+                  <image class="vip-icon" src="../../static/images/mine/vip-icon.png" mode="aspectFit" />
                   <text class="vip-text">{{ walletInfo.vip }}</text>
                 </view>
               </view>
             </view>
-            <image class="wallet-hero" src="../../static/images/mine/wallet-hero.png" mode="widthFix" />
+            <image class="wallet-hero" src="../../static/images/mine/wallet-hero.png" mode="aspectFit" />
           </view>
         </view>
 
+        <!-- 资产卡片 -->
         <view class="asset-card">
-          <view class="asset-heading">
-            <text class="asset-title">我的资产</text>
-            <view class="asset-chip">
-              <text class="asset-chip-text">账户保障</text>
+          <image class="asset-card-bg" src="../../static/images/mine/asset-card-bg.png" mode="aspectFill" />
+          <view class="asset-content">
+            <view class="asset-heading">
+              <text class="asset-title">我的资产</text>
             </view>
-          </view>
-          <view class="asset-summary">
-            <view v-for="item in assetSummary" :key="item.label" class="asset-item">
-              <text class="asset-label">{{ item.label }}</text>
-              <text class="asset-value">{{ item.value }}</text>
-            </view>
-            <image class="asset-graphic" src="https://picsum.photos/200/160" mode="aspectFit" />
-          </view>
-        </view>
-
-        <view class="action-row">
-          <view class="action-btn dark">充值</view>
-          <view class="action-btn light">提现</view>
-        </view>
-
-        <view class="income-row">
-          <view v-for="item in incomeStats" :key="item.title" class="income-card">
-            <view class="income-icon-wrap">
-              <image class="income-icon" :src="item.icon" mode="aspectFit" />
-            </view>
-            <text class="income-value">{{ item.value }}</text>
-            <text class="income-title">{{ item.title }}</text>
-          </view>
-        </view>
-
-        <view class="record-card">
-          <view v-for="item in recordList" :key="item.title" class="record-row">
-            <view class="record-left">
-              <image class="record-icon" :src="item.icon" mode="aspectFit" />
-              <view class="record-text">
-                <text class="record-title">{{ item.title }}</text>
-                <text class="record-desc">{{ item.desc }}</text>
+            <view class="asset-summary">
+              <view class="asset-list">
+                <view v-for="item in assetSummary" :key="item.label" class="asset-item">
+                  <text class="asset-label">{{ item.label }}</text>
+                  <text class="asset-value">{{ item.value }}</text>
+                </view>
               </view>
             </view>
-            <text class="record-arrow">›</text>
           </view>
         </view>
 
-        <view class="quick-card">
-          <view v-for="item in quickActions" :key="item.title" class="quick-item">
-            <image class="quick-icon" :src="item.icon" mode="aspectFit" />
-            <text class="quick-title">{{ item.title }}</text>
-          </view>
+        <!-- 充值提现按钮 -->
+        <view class="action-row">
+          <view class="action-btn dark" @click="xwlb">充值</view>
+          <view class="action-btn light" @click="szls">提现</view>
         </view>
 
-        <view class="feature-card">
-          <view v-for="item in featureList" :key="item.title" class="feature-item">
-            <view class="feature-icon">★</view>
-            <view class="feature-text">
-              <text class="feature-title">{{ item.title }}</text>
-              <text class="feature-desc">{{ item.desc }}</text>
+        <!-- 收益卡片 -->
+        <view class="income-row">
+          <view v-for="item in incomeStats" :key="item.title" class="income-card">
+            <image class="income-card-bg" :src="item.icon" mode="widthFix" />
+            <view class="income-content">
+              <text class="income-value">{{ item.value }}</text>
+              <text class="income-title">{{ item.title }}</text>
             </view>
           </view>
         </view>
 
-        <view class="promo-card">
-          <text class="promo-title">{{ promo.title }}</text>
-          <text class="promo-sub">{{ promo.subtitle }}</text>
-          <text class="promo-desc">{{ promo.detail }}</text>
-          <view class="promo-link">
-            <text class="promo-url">{{ promo.link }}</text>
-            <text class="promo-copy">{{ promo.copy }}</text>
+        <!-- 投单记录和收支流水 -->
+        <view class="record-list">
+          <view v-for="item in recordList" :key="item.title" class="record-card">
+            <view class="record-left">
+              <image class="record-icon" :src="item.icon" mode="widthFix" />
+              <text class="record-title">{{ item.title }}</text>
+            </view>
+            <image class="record-arrow" src="../../static/images/mine/more.png" mode="aspectFit" />
           </view>
-          <text class="promo-note">{{ promo.note }}</text>
+        </view>
+
+        <!-- 底部功能区域 -->
+        <view class="bottom-section">
+          <image class="bottom-section-bg" src="../../static/images/mine/bottom-section-bg.png" mode="widthFix" />
+          <view class="bottom-content">
+            <!-- 快捷操作 -->
+            <view class="quick-card">
+              <view v-for="item in quickActions" :key="item.title" class="quick-item">
+                <view class="quick-icon-wrap">
+                  <image class="quick-icon" :src="item.icon" mode="widthFix" />
+                </view>
+                <text class="quick-title">{{ item.title }}</text>
+              </view>
+            </view>
+
+            <!-- 特色功能 -->
+            <view class="feature-card">
+              <view v-for="item in featureList" :key="item.title" class="feature-item">
+                <image class="feature-icon" :src="item.icon" mode="aspectFit" />
+                <view class="feature-text">
+                  <text class="feature-title">{{ item.title }}</text>
+                  <text class="feature-desc">{{ item.desc }}</text>
+                </view>
+              </view>
+            </view>
+
+            <!-- 推广卡片 -->
+            <view class="promo-card">
+              <image class="promo-card-bg" src="../../static/images/mine/promo-card-bg.png" mode="aspectFill" style="border-radius: 12rpx;" />
+              <view class="promo-content">
+                <text class="promo-title">{{ promo.title }}</text>
+                <text class="promo-sub">{{ promo.subtitle }}</text>
+                <text class="promo-desc">{{ promo.detail }}</text>
+                <view class="promo-link">
+                  <text class="promo-url">{{ promo.link }}</text>
+                  <view class="promo-copy-btn">
+                    <image class="promo-copy-icon" src="../../static/images/mine/copy.png" mode="aspectFit" />
+                    <text class="promo-copy-text">{{ promo.copy }}</text>
+                  </view>
+                </view>
+                <text class="promo-note">{{ promo.note }}</text>
+              </view>
+            </view>
+          </view>
         </view>
       </view>
     </scroll-view>
@@ -96,9 +133,26 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, ref, computed } from 'vue'
+import LanguageToggle from '@/components/LanguageToggle.vue'
 
 const heroBg = '../../static/images/mine/hero-bg.png'
+
+// 滚动距离
+const scrollTop = ref(0)
+
+// 导航栏背景色（根据滚动距离动态计算透明度）
+const navbarBgColor = computed(() => {
+  // 滚动距离超过 200 时完全变白，之前渐变
+  const opacity = Math.min(scrollTop.value / 200, 1)
+  // 初始透明度为 0（完全透明），随着滚动逐渐变为 1（完全白色）
+  return opacity === 0 ? 'transparent' : `rgba(255, 255, 255, ${opacity})`
+})
+
+// 处理滚动事件
+const handleScroll = (e) => {
+  scrollTop.value = e.detail.scrollTop
+}
 
 const walletInfo = reactive({
   address: '0X0A...DD9A',
@@ -112,41 +166,64 @@ const assetSummary = [
 ]
 
 const incomeStats = [
-  { title: '今日收益', value: '3620', icon: 'https://picsum.photos/110/110' },
-  { title: '昨日收益', value: '3620', icon: 'https://picsum.photos/111/110' }
+  { title: '今日收益', value: '3620', icon: '../../static/images/mine/income-today-bg.png' },
+  { title: '昨日收益', value: '3620', icon: '../../static/images/mine/income-yesterday-bg.png' }
 ]
 
 const recordList = [
-  { title: '投单记录', desc: '随时查看投单进度', icon: 'https://picsum.photos/64/64' },
-  { title: '收支流水', desc: '每一笔资金清晰可见', icon: 'https://picsum.photos/65/64' }
+  { title: '投单记录', icon: '../../static/images/mine/order-record-icon.png' },
+  { title: '收支流水', icon: '../../static/images/mine/transaction-record-icon.png' }
 ]
 
 const quickActions = [
-  { title: '下载MAYPAY APP', icon: 'https://picsum.photos/70/70' },
-  { title: '完成KYC', icon: 'https://picsum.photos/71/70' },
-  { title: '随时随地提取现金', icon: 'https://picsum.photos/72/70' }
+  { title: '下载MAYPAY APP', icon: '../../static/images/mine/download-app-icon.png' },
+  { title: '完成KYC', icon: '../../static/images/mine/kyc-icon.png' },
+  { title: '随时随地提取现金', icon: '../../static/images/mine/withdraw-cash-icon.png' }
 ]
 
 const featureList = [
-  { title: '全球通行', desc: '随时随地提取现金' },
-  { title: '多元配置', desc: '多币种资产自由搭配' },
-  { title: '尊贵特权', desc: '专属客服全天候守候' },
-  { title: '正规公司', desc: '严格遵守香港法规' }
+  { title: '全球通行', desc: '随时随地提取现金', icon: '../../static/images/mine/global-access-icon.png' },
+  { title: '多元配置', desc: '用于资产到账后资产方案车辆配置', icon: '../../static/images/mine/multi-config-icon.png' },
+  { title: '尊贵特权', desc: '注册即送 24 小时专属客服服务', icon: '../../static/images/mine/vip-privilege-icon.png' },
+  { title: '正规公司', desc: '注册于香港进法律法规', icon: '../../static/images/mine/legal-company-icon.png' }
 ]
 
 const promo = reactive({
   title: 'VIRTU108-万事达U卡',
-  subtitle: '108万付款计划全球通行',
-  detail: '支持微信、支付宝、银联等多渠道结算，ATM取现便捷无忧。',
-  link: 'https://vip.maypay.hk/?vCode=207167',
+  subtitle: '108万游戏计划全球通行，支持微信、支付宝、银联等多渠道结算，ATM取现，银行转账',
+  detail: '108市商计划-万事达U卡办理专属链接',
+  link: ' http://vip.maypay.hk/?vCode=207167',
   copy: '复制',
-  note: '金牌链接即将到期，请尽快完成申请'
+  note: '注：金牌链接即可下载 下载后请尽快完成申请'
 })
+
+const xwlb = () => {
+  uni.navigateTo({
+    url: '/pages/news/index'
+  })
+}
+const szls = () => {
+  uni.navigateTo({
+    url: '/pages/transaction/index'
+  })
+}
 </script>
 
 <style lang="scss" scoped>
-.page { min-height: 100vh; background: #fef7ef; }
-.scroll { height: 100vh; }
+.page {
+  min-height: 100vh;
+  background: #fef7ef;
+}
+
+.scroll {
+  height: 100vh;
+}
+
+/* 导航栏占位 */
+.navbar-placeholder {
+  height: 88rpx;
+}
+
 .hero-bg {
   position: absolute;
   left: 0;
@@ -156,155 +233,456 @@ const promo = reactive({
   height: 520rpx;
   z-index: 0;
 }
+
 .container {
   position: relative;
   z-index: 1;
-  padding: 120rpx 32rpx 160rpx;
+  padding: 32rpx 24rpx 160rpx;
   display: flex;
   flex-direction: column;
   row-gap: 28rpx;
 }
+
+/* 顶部用户信息 */
 .header-card {
   display: flex;
   flex-direction: column;
-  row-gap: 28rpx;
 }
-.header-main { display: flex; justify-content: space-between; align-items: center; column-gap: 24rpx; }
-.wallet-info { display: flex; align-items: center; column-gap: 22rpx; }
-.avatar { width: 140rpx; height: 140rpx; border-radius: 60rpx; }
-.wallet-text { display: flex; flex-direction: column; row-gap: 24rpx; }
-.wallet-id { font-size: 38rpx; font-weight: 700; color: #333; }
-.vip-icon {
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 24rpx;
+}
+
+.wallet-info {
+  display: flex;
+  align-items: center;
+  column-gap: 20rpx;
+}
+
+.avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 56rpx;
+}
+
+.wallet-text {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12rpx;
+}
+
+.wallet-id {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.vip-badge {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 126rpx;
   height: 40rpx;
-  background: url('../../static/images/mine/vip-icon.png') center/cover no-repeat;
 }
-.vip-text { font-size: 30rpx; font-weight: 700; color: #BA6A2D;margin-left: 18rpx; }
-.wallet-hero { width: 240rpx; height: 209rpx; }
 
+.vip-icon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.vip-text {
+  position: relative;
+  z-index: 1;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #BA6A2D;
+  margin-left: 28rpx;
+  font-style: italic;
+}
+
+.wallet-hero {
+  width: 240rpx;
+  height: 209rpx;
+  flex-shrink: 0;
+}
+
+/* 资产卡片 */
 .asset-card {
-  border-radius: 36rpx;
-  padding: 36rpx 32rpx;
-  background: linear-gradient(135deg, #ff9346, #ffc45f);
-  box-shadow: 0 18rpx 44rpx rgba(255, 142, 59, 0.45);
+  border-radius: 24rpx;
+  overflow: hidden;
+  position: relative;
+}
+
+.asset-card-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.asset-content {
+  position: relative;
+  z-index: 1;
+  padding: 32rpx 28rpx;
   color: #fff;
 }
-.asset-heading { display: flex; justify-content: space-between; align-items: center; }
-.asset-title { font-size: 36rpx; font-weight: 700; }
-.asset-chip { padding: 8rpx 26rpx; border-radius: 999rpx; background: rgba(255, 255, 255, 0.25); }
-.asset-chip-text { font-size: 24rpx; }
-.asset-summary { margin-top: 30rpx; display: flex; align-items: center; justify-content: space-between; column-gap: 24rpx; }
-.asset-item { display: flex; flex-direction: column; row-gap: 8rpx; }
-.asset-label { font-size: 26rpx; opacity: 0.9; }
-.asset-value { font-size: 52rpx; font-weight: 700; letter-spacing: 1rpx; }
-.asset-graphic { width: 220rpx; height: 150rpx; }
 
-.action-row { display: flex; column-gap: 24rpx; }
-.action-btn {
-  flex: 1;
-  height: 100rpx;
-  border-radius: 50rpx;
-  text-align: center;
-  line-height: 100rpx;
+.asset-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+
+.asset-title {
   font-size: 34rpx;
   font-weight: 700;
 }
-.action-btn.dark { background: #050505; color: #fff; }
-.action-btn.light { background: linear-gradient(135deg, #ffe488, #ffb347); color: #743400; }
 
-.income-row { display: flex; column-gap: 24rpx; }
+.asset-summary {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  column-gap: 24rpx;
+}
+
+.asset-list {
+  display: flex;
+  row-gap: 20rpx;
+  flex: 1;
+  padding-bottom: 20rpx;
+}
+
+.asset-item {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.asset-label {
+  font-size: 26rpx;
+}
+
+.asset-value {
+  font-size: 42rpx;
+  font-weight: 700;
+}
+
+/* 充值提现按钮 */
+.action-row {
+  display: flex;
+  column-gap: 20rpx;
+}
+
+.action-btn {
+  flex: 1;
+  height: 89rpx;
+  border-radius: 44rpx;
+  text-align: center;
+  line-height: 89rpx;
+  font-size: 34rpx;
+}
+
+.action-btn.dark {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.action-btn.light {
+  background: linear-gradient(90deg, #F9BF29 0%, #FD6946 100%);
+  color: #fff;
+}
+
+/* 收益卡片 */
+.income-row {
+  display: flex;
+  column-gap: 20rpx;
+}
+
 .income-card {
   flex: 1;
+  border-radius: 20rpx;
+  overflow: hidden;
+  position: relative;
+  height: 159rpx;
+}
+
+.income-card-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.income-content {
+  position: relative;
+  z-index: 1;
+  padding: 28rpx 20rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  row-gap: 8rpx;
+  height: 100%;
+}
+
+.income-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #333;
+}
+
+.income-title {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+/* 投单记录和收支流水 */
+.record-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24rpx;
+}
+
+.record-card {
+  border-radius: 20rpx;
   background: #fff;
-  border-radius: 28rpx;
-  padding: 32rpx 24rpx;
-  box-shadow: 0 14rpx 36rpx rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.06);
+  padding: 32rpx 28rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-left {
+  display: flex;
+  column-gap: 20rpx;
+  align-items: center;
+}
+
+.record-icon {
+  width: 38rpx;
+  height: 40rpx;
+}
+
+.record-title {
+  font-size: 30rpx;
+  color: #333;
+}
+
+.record-arrow {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+/* 底部功能区域 */
+.bottom-section {
+  position: relative;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+
+.bottom-section-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.bottom-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 24rpx;
+  padding-bottom: 24rpx;
+}
+
+/* 快捷操作 */
+.quick-card {
+  padding: 32rpx 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.quick-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  row-gap: 14rpx;
+  row-gap: 16rpx;
 }
-.income-icon-wrap { width: 94rpx; height: 94rpx; border-radius: 47rpx; background: linear-gradient(180deg, #fff7ea, #ffdcbf); display: flex; align-items: center; justify-content: center; }
-.income-icon { width: 70rpx; height: 70rpx; }
-.income-value { font-size: 42rpx; font-weight: 700; color: #3b220f; }
-.income-title { font-size: 26rpx; color: #b18143; }
 
-.record-card { border-radius: 28rpx; background: #fff; box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.06); }
-.record-row {
-  padding: 32rpx;
+.quick-icon-wrap {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 48rpx;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1rpx solid #f2e3d6;
+  justify-content: center;
 }
-.record-row:last-child { border-bottom: none; }
-.record-left { display: flex; column-gap: 22rpx; align-items: center; }
-.record-icon { width: 64rpx; height: 64rpx; }
-.record-text { display: flex; flex-direction: column; row-gap: 8rpx; }
-.record-title { font-size: 30rpx; color: #341e0d; font-weight: 600; }
-.record-desc { font-size: 24rpx; color: #b48d64; }
-.record-arrow { font-size: 44rpx; color: #c7b39f; }
 
-.quick-card {
-  border-radius: 28rpx;
-  background: #fff;
-  padding: 26rpx 12rpx;
-  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.06);
-  display: flex;
-  justify-content: space-around;
+.quick-icon {
+  width: 88rpx;
+  height: 88rpx;
 }
-.quick-item { display: flex; flex-direction: column; align-items: center; row-gap: 14rpx; max-width: 200rpx; }
-.quick-icon { width: 88rpx; height: 88rpx; border-radius: 44rpx; background: #fff6ec; }
-.quick-title { font-size: 26rpx; color: #2f1a0b; text-align: center; line-height: 1.4; }
 
+.quick-title {
+  font-size: 26rpx;
+  color: #333;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* 特色功能 */
 .feature-card {
-  border-radius: 28rpx;
-  background: #fff;
-  padding: 28rpx 20rpx;
-  box-shadow: 0 12rpx 32rpx rgba(0, 0, 0, 0.05);
+  padding: 0 24rpx;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-column-gap: 18rpx;
-  grid-row-gap: 26rpx;
+  grid-column-gap: 24rpx;
+  grid-row-gap: 32rpx;
 }
-.feature-item { display: flex; column-gap: 16rpx; }
-.feature-icon {
-  width: 60rpx;
-  height: 60rpx;
-  border-radius: 30rpx;
-  background: linear-gradient(135deg, #ffe9b7, #ffcf86);
-  text-align: center;
-  line-height: 60rpx;
-  color: #c36f18;
-  font-size: 32rpx;
-}
-.feature-text { display: flex; flex-direction: column; row-gap: 8rpx; }
-.feature-title { font-size: 28rpx; color: #341d09; font-weight: 600; }
-.feature-desc { font-size: 24rpx; color: #b4874d; }
 
-.promo-card {
-  border-radius: 32rpx;
-  padding: 32rpx 28rpx;
-  background: linear-gradient(165deg, #1f0d01 0%, #5b2b05 60%, #c57414 100%);
-  color: #fff;
-  box-shadow: 0 18rpx 40rpx rgba(0, 0, 0, 0.25);
+.feature-item {
+  display: flex;
+  column-gap: 16rpx;
+  align-items: flex-start;
 }
-.promo-title { font-size: 34rpx; font-weight: 700; }
-.promo-sub { margin-top: 12rpx; font-size: 26rpx; color: #ffd9a0; }
-.promo-desc { margin-top: 18rpx; font-size: 26rpx; line-height: 1.6; }
+
+.feature-icon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 28rpx;
+  flex-shrink: 0;
+}
+
+.feature-text {
+  display: flex;
+  flex-direction: column;
+  row-gap: 8rpx;
+  flex: 1;
+}
+
+.feature-title {
+  font-size: 26rpx;
+  color: #2d1a0a;
+  font-weight: 600;
+}
+
+.feature-desc {
+  font-size: 22rpx;
+  color: #a67c4d;
+  line-height: 1.5;
+}
+
+/* 推广卡片 */
+.promo-card {
+  position: relative;
+  margin: 0 22rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  height: 443rpx;
+  box-sizing: border-box;
+}
+
+.promo-card-bg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 443rpx;
+  z-index: 0;
+  border-radius: 12rpx;
+}
+
+.promo-content {
+  position: relative;
+  z-index: 1;
+  padding: 0 24rpx;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.promo-title {
+  font-size: 48rpx;
+  font-weight: 700;
+  max-width: 260rpx;
+  color: #FE9C2D;
+  line-height: 1;
+  margin-top: 24rpx;
+}
+
+.promo-sub {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #ffd9a0;
+  max-width: 350rpx;
+}
+
+.promo-desc {
+  margin-top: 12rpx;
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .promo-link {
-  margin-top: 20rpx;
-  padding: 16rpx 20rpx;
-  border-radius: 16rpx;
-  background: rgba(0, 0, 0, 0.35);
+  padding: 16rpx 0;
+  border-radius: 10rpx;
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16rpx;
 }
-.promo-url { font-size: 24rpx; color: #ffe1b0; }
-.promo-copy { font-size: 24rpx; color: #ffb85c; }
-.promo-note { margin-top: 18rpx; font-size: 22rpx; color: #fdd48e; }
+
+.promo-url {
+  font-size: 28rpx;
+  color: #FE9C2D;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.promo-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  flex-shrink: 0;
+}
+
+.promo-copy-icon {
+  width: 20rpx;
+  height: 20rpx;
+  flex-shrink: 0;
+}
+
+.promo-copy-text {
+  font-size: 24rpx;
+  color: #FE9C2D;
+  white-space: nowrap;
+}
+
+.promo-note {
+  margin-top: 12rpx;
+  font-size: 24rpx; 
+  color: #FFBDBD;
+}
 </style>

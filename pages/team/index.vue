@@ -1,10 +1,28 @@
 <template>
   <view class="page">
     <image class="bg" src="../../static/images/team/bg.png" mode="widthFix" />
-    <view class="container">
-      <view class="team-header">
+
+    <!-- 顶部导航栏 - 固定定位悬浮 -->
+    <uv-navbar
+      :placeholder="false"
+      :autoBack="false"
+      leftIconSize="0"
+      :bgColor="navbarBgColor"
+      :fixed="true"
+    >
+      <template #right>
         <LanguageToggle />
-      </view>
+      </template>
+    </uv-navbar>
+
+    <scroll-view
+      scroll-y
+      class="scroll-view"
+      @scroll="handleScroll"
+    >
+      <!-- 导航栏占位 -->
+      <view class="navbar-placeholder"></view>
+      <view class="container">
       <image class="hero" src="../../static/images/team/hero.png" mode="widthFix" />
 
       <view class="stats-card">
@@ -106,12 +124,14 @@
       </view>
 
     </view>
+    </scroll-view>
   </view>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+
 const inviteLink = ref('HTTPS://WEBN13.COM.CC/#/CODE=...')
 const rows = ref([
   { address: '12233213121...', time: '2025-11-19', value: '26390' },
@@ -121,6 +141,23 @@ const rows = ref([
 ])
 const claimableUpgradeU = ref(0)
 const missedUpgradeU = ref(0)
+
+// 滚动距离
+const scrollTop = ref(0)
+
+// 导航栏背景色（根据滚动距离动态计算透明度）
+const navbarBgColor = computed(() => {
+  // 滚动距离超过 200 时完全变白，之前渐变
+  const opacity = Math.min(scrollTop.value / 200, 1)
+  // 初始透明度为 0（完全透明），随着滚动逐渐变为 1（完全白色）
+  return opacity === 0 ? 'transparent' : `rgba(255, 255, 255, ${opacity})`
+})
+
+// 处理滚动事件
+const handleScroll = (e) => {
+  scrollTop.value = e.detail.scrollTop
+}
+
 const copyLink = () => {
   // #ifdef H5
   navigator.clipboard && navigator.clipboard.writeText(inviteLink.value)
@@ -130,10 +167,36 @@ const copyLink = () => {
 </script>
 
 <style lang="scss" scoped>
-.page { min-height:100vh; position: relative; background:#f7f7f7; }
-.bg { position:absolute; left:0; right:0; top:0; width:100%; height: 440rpx; }
-.container { position: relative; padding: 24rpx; }
-.team-header { position: absolute; right: 38rpx; top: 51rpx; z-index: 2; }
+.page {
+  min-height:100vh;
+  position: relative;
+  background:#f7f7f7;
+}
+
+.scroll-view {
+  height: 100vh;
+  width: 100%;
+}
+
+.bg {
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  width:100%;
+  height: 440rpx;
+  z-index: 0;
+}
+
+/* 导航栏占位 */
+.navbar-placeholder {
+  height: 88rpx;
+}
+
+.container {
+  position: relative;
+  padding: 24rpx;
+}
 .hero { width:519rpx; height: 436rpx; margin: 0 auto; display: block;position: relative; z-index: 1; }
 
 .stats-card { height: 351rpx; margin-top: -70rpx; position: relative; border-radius: 16rpx; padding: 20rpx; color:#fff; overflow: hidden; }

@@ -1,14 +1,34 @@
 <template>
   <view class="page">
     <image class="bg" src="../../static/images/index/bg.png" mode="widthFix" />
-    <view class="container">
-    <view class="header">
-      <view class="left">
-        <image class="logo" src="../../static/images/index/logo.png" />
-        <text class="brand">VIRTU108</text>
-      </view>
-      <LanguageToggle />
-    </view>
+
+    <!-- 顶部导航栏 - 固定定位悬浮 -->
+    <uv-navbar
+      :placeholder="false"
+      :autoBack="false"
+      leftIconSize="0"
+      :bgColor="navbarBgColor"
+      :fixed="true"
+    >
+      <template #left>
+        <view class="navbar-left">
+          <image class="logo" src="../../static/images/index/logo.png" />
+          <text class="brand">VIRTU108</text>
+        </view>
+      </template>
+      <template #right>
+        <LanguageToggle />
+      </template>
+    </uv-navbar>
+
+    <scroll-view
+      scroll-y
+      class="scroll-view"
+      @scroll="handleScroll"
+    >
+      <!-- 导航栏占位 -->
+      <view class="navbar-placeholder"></view>
+      <view class="container">
 
     <image class="hero" src="../../static/images/index/hero.png" mode="widthFix" />
 
@@ -39,10 +59,12 @@
     </view>
 
     </view>
+    </scroll-view>
   </view>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
 
 const coins = [
@@ -50,22 +72,63 @@ const coins = [
   { symbol: 'ETH', price: '203,887.00', priceSub: '$203,887.00', change: 1.36, changeText: '+1.36%', meta: '$90.15M | $10.63B', icon: '../../static/images/index/coin-sub-btc.png', subIcon: '../../static/images/index/coin-btc.png' },
   { symbol: 'SOL', price: '302,000.00', priceSub: '$302,000.00', change: 1.20, changeText: '+1.20%', meta: '$60.16M | $11.63B', icon: '../../static/images/index/coin-btc.png', subIcon: '../../static/images/index/coin-sub-btc.png' }
 ]
+
+// 滚动距离
+const scrollTop = ref(0)
+
+// 导航栏背景色（根据滚动距离动态计算透明度）
+const navbarBgColor = computed(() => {
+  // 滚动距离超过 200 时完全变白，之前渐变
+  const opacity = Math.min(scrollTop.value / 200, 1)
+  // 初始透明度为 0（完全透明），随着滚动逐渐变为 1（完全白色）
+  return opacity === 0 ? 'transparent' : `rgba(255, 255, 255, ${opacity})`
+})
+
+// 处理滚动事件
+const handleScroll = (e) => {
+  scrollTop.value = e.detail.scrollTop
+}
 </script>
 
 
 <style lang="scss">
 @import "@/styles/common.scss";
 
-.page { min-height: 100vh; position: relative; background: #f7f7f7; }
-.bg { position: absolute; left:0; right:0; top:0; width: 100%; height: 440rpx; }
-.container { position: relative; padding: 30rpx; }
+.page {
+  min-height: 100vh;
+  position: relative;
+  background: #f7f7f7;
+}
 
-.header { height: 88rpx; padding: 0 8rpx; display:flex; align-items:center; justify-content:space-between; }
-.left { display:flex; align-items:center; gap: 12rpx; }
+.scroll-view {
+  height: 100vh;
+  width: 100%;
+}
+
+.bg {
+  position: absolute;
+  left:0;
+  right:0;
+  top:0;
+  width: 100%;
+  height: 440rpx;
+  z-index: 0;
+}
+
+/* 导航栏占位 */
+.navbar-placeholder {
+  height: 88rpx;
+}
+
+.container {
+  position: relative;
+  padding: 30rpx;
+}
+
+/* 导航栏左侧内容 */
+.navbar-left { display:flex; align-items:center; gap: 12rpx; }
 .logo { width: 78rpx; height: 78rpx; border-radius: 20rpx; }
 .brand { font-size: 36rpx; font-weight: 700; color:#333; }
-.lang { display:flex; align-items:center; }
-.lang-icon { width: 50rpx; height: 48rpx; border-radius: 10rpx; }
 .hero { width: 100%; height: 573rpx; border-radius: 20rpx; }
 .notice { position: relative; overflow: hidden; height: 90rpx; display:flex; align-items:center; padding: 0 20rpx; color:#333; background: transparent; }
 .notice-bg { position:absolute; left:0; top:0; width:100%; height:100%; }
