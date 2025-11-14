@@ -42,12 +42,12 @@
           <image class="asset-card-bg" src="../../static/images/mine/asset-card-bg.png" mode="aspectFill" />
           <view class="asset-content">
             <view class="asset-heading">
-              <text class="asset-title">我的资产</text>
+              <text class="asset-title">{{ t('mine.asset.title') }}</text>
             </view>
             <view class="asset-summary">
               <view class="asset-list">
                 <view v-for="item in assetSummary" :key="item.label" class="asset-item">
-                  <text class="asset-label">{{ item.label }}</text>
+                  <text class="asset-label">{{ t(item.label) }}</text>
                   <text class="asset-value">{{ item.value }}</text>
                 </view>
               </view>
@@ -57,8 +57,8 @@
 
         <!-- 充值提现按钮 -->
         <view class="action-row">
-          <view class="action-btn dark" @click="xwlb">充值</view>
-          <view class="action-btn light" @click="szls">提现</view>
+          <view class="action-btn dark" @click="xwlb">{{ t('mine.actions.deposit') }}</view>
+          <view class="action-btn light" @click="szls">{{ t('mine.actions.withdraw') }}</view>
         </view>
 
         <!-- 收益卡片 -->
@@ -67,7 +67,7 @@
             <image class="income-card-bg" :src="item.icon" mode="widthFix" />
             <view class="income-content">
               <text class="income-value">{{ item.value }}</text>
-              <text class="income-title">{{ item.title }}</text>
+              <text class="income-title">{{ t(item.title) }}</text>
             </view>
           </view>
         </view>
@@ -77,7 +77,7 @@
           <view v-for="item in recordList" :key="item.title" class="record-card">
             <view class="record-left">
               <image class="record-icon" :src="item.icon" mode="widthFix" />
-              <text class="record-title">{{ item.title }}</text>
+              <text class="record-title">{{ t(item.title) }}</text>
             </view>
             <image class="record-arrow" src="../../static/images/mine/more.png" mode="aspectFit" />
           </view>
@@ -93,7 +93,7 @@
                 <view class="quick-icon-wrap">
                   <image class="quick-icon" :src="item.icon" mode="widthFix" />
                 </view>
-                <text class="quick-title">{{ item.title }}</text>
+                <text class="quick-title">{{ t(item.title) }}</text>
               </view>
             </view>
 
@@ -102,8 +102,8 @@
               <view v-for="item in featureList" :key="item.title" class="feature-item">
                 <image class="feature-icon" :src="item.icon" mode="aspectFit" />
                 <view class="feature-text">
-                  <text class="feature-title">{{ item.title }}</text>
-                  <text class="feature-desc">{{ item.desc }}</text>
+                  <text class="feature-title">{{ t(item.title) }}</text>
+                  <text class="feature-desc">{{ t(item.desc) }}</text>
                 </view>
               </view>
             </view>
@@ -112,17 +112,17 @@
             <view class="promo-card">
               <image class="promo-card-bg" src="../../static/images/mine/promo-card-bg.png" mode="aspectFill" style="border-radius: 12rpx;" />
               <view class="promo-content">
-                <text class="promo-title">{{ promo.title }}</text>
-                <text class="promo-sub">{{ promo.subtitle }}</text>
-                <text class="promo-desc">{{ promo.detail }}</text>
+                <text class="promo-title">{{ t('mine.promo.title') }}</text>
+                <text class="promo-sub">{{ t('mine.promo.subtitle') }}</text>
+                <text class="promo-desc">{{ t('mine.promo.detail') }}</text>
                 <view class="promo-link">
                   <text class="promo-url">{{ promo.link }}</text>
                   <view class="promo-copy-btn">
                     <image class="promo-copy-icon" src="../../static/images/mine/copy.png" mode="aspectFit" />
-                    <text class="promo-copy-text">{{ promo.copy }}</text>
+                    <text class="promo-copy-text">{{ t('mine.promo.copy') }}</text>
                   </view>
                 </view>
-                <text class="promo-note">{{ promo.note }}</text>
+                <text class="promo-note">{{ t('mine.promo.note') }}</text>
               </view>
             </view>
           </view>
@@ -135,6 +135,10 @@
 <script setup>
 import { reactive, ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+
+import { useI18n } from '@/hooks/useI18n.js'
+
+const { t } = useI18n()
 
 const heroBg = '../../static/images/mine/hero-bg.png'
 
@@ -161,40 +165,35 @@ const walletInfo = reactive({
 })
 
 const assetSummary = [
-  { label: 'USDT余额', value: '3620' },
-  { label: 'FIN余额', value: '369,560.00' }
+  { label: 'mine.asset.usdtBalance', value: '3620' },
+  { label: 'mine.asset.finBalance', value: '369,560.00' }
 ]
 
 const incomeStats = [
-  { title: '今日收益', value: '3620', icon: '../../static/images/mine/income-today-bg.png' },
-  { title: '昨日收益', value: '3620', icon: '../../static/images/mine/income-yesterday-bg.png' }
+  { title: 'mine.income.today', value: '3620', icon: '../../static/images/mine/income-today-bg.png' },
+  { title: 'mine.income.yesterday', value: '3620', icon: '../../static/images/mine/income-yesterday-bg.png' }
 ]
 
 const recordList = [
-  { title: '投单记录', icon: '../../static/images/mine/order-record-icon.png' },
-  { title: '收支流水', icon: '../../static/images/mine/transaction-record-icon.png' }
+  { title: 'mine.records.order', icon: '../../static/images/mine/order-record-icon.png' },
+  { title: 'mine.records.transaction', icon: '../../static/images/mine/transaction-record-icon.png' }
 ]
 
 const quickActions = [
-  { title: '下载MAYPAY APP', icon: '../../static/images/mine/download-app-icon.png' },
-  { title: '完成KYC', icon: '../../static/images/mine/kyc-icon.png' },
-  { title: '随时随地提取现金', icon: '../../static/images/mine/withdraw-cash-icon.png' }
+  { title: 'mine.quick.downloadApp', icon: '../../static/images/mine/download-app-icon.png' },
+  { title: 'mine.quick.completeKyc', icon: '../../static/images/mine/kyc-icon.png' },
+  { title: 'mine.quick.withdrawAnytime', icon: '../../static/images/mine/withdraw-cash-icon.png' }
 ]
 
 const featureList = [
-  { title: '全球通行', desc: '随时随地提取现金', icon: '../../static/images/mine/global-access-icon.png' },
-  { title: '多元配置', desc: '用于资产到账后资产方案车辆配置', icon: '../../static/images/mine/multi-config-icon.png' },
-  { title: '尊贵特权', desc: '注册即送 24 小时专属客服服务', icon: '../../static/images/mine/vip-privilege-icon.png' },
-  { title: '正规公司', desc: '注册于香港进法律法规', icon: '../../static/images/mine/legal-company-icon.png' }
+  { title: 'mine.features.globalAccess.title', desc: 'mine.features.globalAccess.desc', icon: '../../static/images/mine/global-access-icon.png' },
+  { title: 'mine.features.multiConfig.title', desc: 'mine.features.multiConfig.desc', icon: '../../static/images/mine/multi-config-icon.png' },
+  { title: 'mine.features.vipPrivilege.title', desc: 'mine.features.vipPrivilege.desc', icon: '../../static/images/mine/vip-privilege-icon.png' },
+  { title: 'mine.features.legalCompany.title', desc: 'mine.features.legalCompany.desc', icon: '../../static/images/mine/legal-company-icon.png' }
 ]
 
 const promo = reactive({
-  title: 'VIRTU108-万事达U卡',
-  subtitle: '108万游戏计划全球通行，支持微信、支付宝、银联等多渠道结算，ATM取现，银行转账',
-  detail: '108市商计划-万事达U卡办理专属链接',
-  link: ' http://vip.maypay.hk/?vCode=207167',
-  copy: '复制',
-  note: '注：金牌链接即可下载 下载后请尽快完成申请'
+  link: 'http://vip.maypay.hk/?vCode=207167'
 })
 
 const xwlb = () => {

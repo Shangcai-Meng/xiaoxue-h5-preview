@@ -4,7 +4,7 @@
     <uv-navbar
       :placeholder="false"
       :autoBack="true"
-      title="详情"
+      :title="t('news.detail.navbarTitle')"
       :bgColor="navbarBgColor"
       :fixed="true"
       leftIconColor="#333"
@@ -60,6 +60,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+import { useI18n } from '@/hooks/useI18n.js'
+
+const { t } = useI18n()
 
 // 滚动距离
 const scrollTop = ref(0)

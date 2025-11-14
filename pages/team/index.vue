@@ -30,20 +30,20 @@
         <view class="stats-top">
           <view class="cell">
             <text class="num">60</text>
-            <text class="label">团队账户</text>
+            <text class="label">{{ t('team.stats.teamAccounts') }}</text>
           </view>
           <view class="cell">
             <text class="num">23</text>
-            <text class="label">直推账户</text>
+            <text class="label">{{ t('team.stats.directAccounts') }}</text>
           </view>
         </view>
         <view class="stats-bottom">
           <view class="item">
-            <text class="lab">团队业绩</text>
+            <text class="lab">{{ t('team.stats.teamPerformance') }}</text>
             <text class="val">0 USDT</text>
           </view>
           <view class="item">
-            <text class="lab">直推业绩</text>
+            <text class="lab">{{ t('team.stats.directPerformance') }}</text>
             <text class="val">3000.00 USDT</text>
           </view>
         </view>
@@ -54,17 +54,17 @@
         <view class="card">
           <image class="card-bg" src="../../static/images/team/earnings-card-bg.png" mode="aspectFill" />
           <view class="card-content">
-            <text class="title">累计收益</text>
+            <text class="title">{{ t('team.cards.totalEarnings') }}</text>
             <text class="amount">0 USDT</text>
-            <view class="btn hollow">明细</view>
+            <view class="btn hollow">{{ t('team.cards.details') }}</view>
           </view>
         </view>
         <view class="card">
           <image class="card-bg" src="../../static/images/team/earnings-card-bg2.png" mode="aspectFill" />
           <view class="card-content">
-            <text class="title">待领取收益</text>
+            <text class="title">{{ t('team.cards.pendingEarnings') }}</text>
             <text class="amount">0 USDT</text>
-            <view class="btn solid">领取</view>
+            <view class="btn solid">{{ t('team.cards.receive') }}</view>
           </view>
         </view>
       </view>
@@ -72,34 +72,34 @@
       <view class="level-card">
         <image class="level-bg" src="../../static/images/team/level-card-bg.png" mode="widthFix" />
         <view class="level-row">
-          <text class="h">当前等级</text>
+          <text class="h">{{ t('team.level.currentLevel') }}</text>
           <text class="addr">0X0A...DD9A</text>
         </view>
         <view class="upgrade-reward-card">
           <view class="col">
-            <text class="lab">可领取升级奖励</text>
+            <text class="lab">{{ t('team.level.claimableUpgradeReward') }}</text>
             <text class="val number">{{ claimableUpgradeU }}U</text>
           </view>
           <view class="col">
-            <text class="lab">已损失升级奖励</text>
+            <text class="lab">{{ t('team.level.missedUpgradeReward') }}</text>
             <text class="val number">{{ missedUpgradeU }}U</text>
           </view>
         </view>
         <view class="tips">
           <view class="tip">
             <image class="dot" src="../../static/images/team/dot.png" />
-            <text class="txt">直推满2人升级后享受收益人数增加到2人</text>
+            <text class="txt">{{ t('team.level.tip1') }}</text>
           </view>
           <view class="tip">
             <image class="dot" src="../../static/images/team/dot.png" />
-            <text class="txt" style="color: #FD6946;">直推满15人后，可享受领导人团队奖励</text>
+            <text class="txt" style="color: #FD6946;">{{ t('team.level.tip2') }}</text>
           </view>
         </view>
       </view>
 
       <view class="invite-card">
         <image class="invite-bg" src="../../static/images/team/invite-card-bg.png" mode="widthFix" />
-        <text class="label">邀请链接：</text>
+        <text class="label">{{ t('team.invite.label') }}</text>
         <view class="invite-row">
           <text class="link">{{ inviteLink }}</text>
           <image class="copy" src="../../static/images/team/copy.png" mode="widthFix" @click="copyLink" />
@@ -108,9 +108,9 @@
 
       <view class="table">
         <view class="thead">
-          <text class="th addr">钱包地址</text>
-          <text class="th join">加入时间</text>
-          <text class="th val">贡献值(USDT)</text>
+          <text class="th addr">{{ t('team.table.walletAddress') }}</text>
+          <text class="th join">{{ t('team.table.joinTime') }}</text>
+          <text class="th val">{{ t('team.table.contribution') }}</text>
         </view>
         <view class="tr" v-for="(r,i) in rows" :key="i">
           <text class="td addr">{{ r.address }}</text>
@@ -119,7 +119,7 @@
         </view>
         <view class="empty" v-if="rows.length === 0">
           <image class="empty-ill" src="../../static/images/team/empty.png" mode="widthFix" />
-          <text class="empty-tip">暂无更多内容</text>
+          <text class="empty-tip">{{ t('team.table.empty') }}</text>
         </view>
       </view>
 
@@ -131,6 +131,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+
+import { useI18n } from '@/hooks/useI18n.js'
+
+const { t } = useI18n()
 
 const inviteLink = ref('HTTPS://WEBN13.COM.CC/#/CODE=...')
 const rows = ref([
@@ -161,7 +165,7 @@ const handleScroll = (e) => {
 const copyLink = () => {
   // #ifdef H5
   navigator.clipboard && navigator.clipboard.writeText(inviteLink.value)
-  uni.showToast({title:"复制成功"})
+  uni.showToast({ title: t('common.copySuccess') })
   // #endif
 }
 </script>

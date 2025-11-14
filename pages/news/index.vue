@@ -4,7 +4,7 @@
     <uv-navbar
       :placeholder="false"
       :autoBack="true"
-      title="新闻列表"
+      :title="t('news.list.navbarTitle')"
       :bgColor="navbarBgColor"
       :fixed="true"
       leftIconColor="#333"
@@ -36,7 +36,7 @@
           @click="handleNewsClick(item)"
         >
           <view class="news-content">
-            <text class="news-title">{{ item.title }}</text>
+            <text class="news-title">{{ t(item.titleKey) }}</text>
             <text class="news-time">{{ item.time }}</text>
           </view>
           <image class="news-thumb" :src="item.thumb" mode="aspectFill" />
@@ -49,6 +49,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+import { useI18n } from '@/hooks/useI18n.js'
+
+const { t } = useI18n()
 
 // 滚动距离
 const scrollTop = ref(0)
@@ -70,31 +73,31 @@ const handleScroll = (e) => {
 const newsList = ref([
   {
     id: 1,
-    title: '区块链是一种去中心化的分布式账本技术，具有不可篡改',
+    titleKey: 'news.list.item1.title',
     time: '2025-11-11  20:10',
     thumb: 'https://picsum.photos/280/200?random=1'
   },
   {
     id: 2,
-    title: '区块链在金融、供应链、医疗不动产等领域得到广泛应用',
+    titleKey: 'news.list.item2.title',
     time: '2025-11-11  20:16',
     thumb: 'https://picsum.photos/280/200?random=2'
   },
   {
     id: 3,
-    title: '尽管仍面临扩展性和法规挑战，但它已经成为改变传统',
+    titleKey: 'news.list.item3.title',
     time: '2025-11-11  21:40',
     thumb: 'https://picsum.photos/280/200?random=3'
   },
   {
     id: 4,
-    title: '区块链的特点包括去中心化、不可篡改、透明、安全',
+    titleKey: 'news.list.item4.title',
     time: '2025-11-11  21:54',
     thumb: 'https://picsum.photos/280/200?random=4'
   },
   {
     id: 5,
-    title: '每个数据块都链接到前一个块形成连续的链，保障了交...',
+    titleKey: 'news.list.item5.title',
     time: '2025-11-11  21:58',
     thumb: 'https://picsum.photos/280/200?random=5'
   }

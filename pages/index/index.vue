@@ -35,10 +35,10 @@
     <view class="notice">
       <image class="notice-bg" src="../../static/images/index/notice-bg.png" mode="aspectFill" />
       <image class="dot" src="../../static/images/index/dot.png" mode="widthFix" />
-      <text class="msg">小冬瓜刚刚注册了会员并获得新人大礼包</text>
+      <text class="msg">{{ t('index.notice.message') }}</text>
     </view>
 
-    <view class="section-title">趋势代币</view>
+    <view class="section-title">{{ t('index.section.trendingTokens') }}</view>
 
     <view class="coin-list">
       <view class="coin-item" v-for="c in coins" :key="c.symbol">
@@ -66,6 +66,10 @@
 <script setup>
 import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+
+import { useI18n } from '@/hooks/useI18n.js'
+
+const { t } = useI18n()
 
 const coins = [
   { symbol: 'BTC', price: '101,887.09', priceSub: '$101,887.09', change: -0.16, changeText: '-0.16%', meta: '$81.15M | $12.92B', icon: '../../static/images/index/coin-btc.png', subIcon: '../../static/images/index/coin-sub-btc.png' },

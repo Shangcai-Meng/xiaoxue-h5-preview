@@ -4,7 +4,7 @@
     <uv-navbar
       :placeholder="false"
       :autoBack="true"
-      title="收支流水"
+      :title="t('transaction.navbar.title')"
       :bgColor="navbarBgColor"
       :fixed="true"
       leftIconColor="#333"
@@ -37,7 +37,7 @@
             :class="{ active: activeTab === index }"
             @click="handleTabChange(index)"
           >
-            <text class="tab-text">{{ tab }}</text>
+            <text class="tab-text">{{ t('transaction.tabs.' + tab) }}</text>
           </view>
         </view>
       </view>
@@ -58,7 +58,7 @@
               />
             </view>
             <view class="item-info">
-              <text class="item-title">{{ item.title }}</text>
+              <text class="item-title">{{ t(item.title) }}</text>
               <text class="item-time">{{ item.time }}</text>
             </view>
           </view>
@@ -74,6 +74,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+import { useI18n } from '@/hooks/useI18n.js'
+
+const { t } = useI18n()
 
 const incomeIcon = '../../static/images/transaction/income-icon.png'
 const expenseIcon = '../../static/images/transaction/expense-icon.png'
@@ -93,7 +96,7 @@ const handleScroll = (e) => {
 }
 
 // Tab选项
-const tabs = ['全部', '收入', '支出']
+const tabs = ['all', 'income', 'expense']
 const activeTab = ref(0)
 
 // 处理Tab切换
@@ -105,43 +108,43 @@ const handleTabChange = (index) => {
 const transactionList = ref([
   {
     type: 'income',
-    title: '买单收益',
+    title: 'transaction.items.orderIncome',
     time: '2025-11-11 11:50',
     amount: 20
   },
   {
     type: 'expense',
-    title: 'BTC流水支出',
+    title: 'transaction.items.btcExpense',
     time: '2025-11-11 11:40',
     amount: 30
   },
   {
     type: 'income',
-    title: '买单收益',
+    title: 'transaction.items.orderIncome',
     time: '2025-11-11 11:50',
     amount: 20
   },
   {
     type: 'expense',
-    title: 'BTC流水支出',
+    title: 'transaction.items.btcExpense',
     time: '2025-11-11 11:40',
     amount: 100
   },
   {
     type: 'income',
-    title: '买单收益',
+    title: 'transaction.items.orderIncome',
     time: '2025-11-11 11:50',
     amount: 20
   },
   {
     type: 'expense',
-    title: 'BTC流水支出',
+    title: 'transaction.items.btcExpense',
     time: '2025-11-11 11:40',
     amount: 800
   },
   {
     type: 'expense',
-    title: 'BTC流水支出',
+    title: 'transaction.items.btcExpense',
     time: '2025-11-11 11:40',
     amount: 10
   }

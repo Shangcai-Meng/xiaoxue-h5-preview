@@ -1,7 +1,7 @@
 <template>
   <view class="page">
     <!-- 顶部导航栏 -->
-    <uv-navbar title="期权合约" titleStyle="font-size: 36rpx;color: #333;" :placeholder="true" :autoBack="false" leftIconSize="0">
+    <uv-navbar :title="t('options.navbar.title')" titleStyle="font-size: 36rpx;color: #333;" :placeholder="true" :autoBack="false" leftIconSize="0">
       <template #right>
         <LanguageToggle />
       </template>
@@ -16,8 +16,8 @@
             <uv-icon name="arrow-down-fill" size="18rpx" color="#333"></uv-icon>
           </view>
           <view class="pair-right">
-            <text class="rise-text">上涨：{{ risePercent }}%</text>
-            <text class="fall-text">下跌：{{ fallPercent }}%</text>
+            <text class="rise-text">{{ t('options.pair.rise') }}: {{ risePercent }}%</text>
+            <text class="fall-text">{{ t('options.pair.fall') }}: {{ fallPercent }}%</text>
           </view>
         </view>
 
@@ -30,7 +30,7 @@
               :key="index"
               :class="['time-tab', { active: currentTimePeriod === item.value }]"
               @click="switchTimePeriod(item)">
-              {{ item.label }}
+              {{ t('options.timePeriods.' + item.key) }}
             </view>
           </view>
 
@@ -47,7 +47,7 @@
         </view>
 
         <!-- 时间单位标签 -->
-        <view class="time-unit">时间单位</view>
+        <view class="time-unit">{{ t('options.time.unit') }}</view>
 
         <!-- 时间周期按钮组 -->
         <view class="period-buttons">
@@ -56,13 +56,13 @@
             :key="index"
             :class="['period-btn', { active: currentPeriod === period }]"
             @click="currentPeriod = period">
-            {{ period }}
+            {{ t('options.periods.' + period) }}
           </view>
         </view>
 
         <!-- 数量输入区域 -->
         <view class="quantity-section">
-          <view class="quantity-label">数量（USDT）</view>
+          <view class="quantity-label">{{ t('options.labels.quantity') }}</view>
           <view class="quantity-input-wrapper">
             <view class="quantity-controls">
               <input type="number" v-model="quantity" class="quantity-input" placeholder="50" />
@@ -91,7 +91,7 @@
             :key="index"
             :class="['order-tab', { active: currentOrderTab === tab.key }]"
             @click="currentOrderTab = tab.key">
-            {{ tab.label }}
+            {{ t('options.orderTabs.' + tab.key) }}
             <view v-if="currentOrderTab === tab.key" class="tab-underline"></view>
           </view>
         </view>
@@ -113,29 +113,29 @@
             </view>
             <view class="order-details">
               <view class="detail-row">
-                <text class="detail-label">数量(USDT)</text>
+                <text class="detail-label">{{ t('options.labels.quantity') }}</text>
                 <text class="detail-value">{{ order.quantity }}</text>
               </view>
               <view class="detail-row">
-                <text class="detail-label">开仓价</text>
+                <text class="detail-label">{{ t('options.labels.openPrice') }}</text>
                 <text class="detail-value">{{ order.openPrice }}</text>
               </view>
               <view class="detail-row">
-                <text class="detail-label">开仓时间</text>
+                <text class="detail-label">{{ t('options.labels.openTime') }}</text>
                 <text class="detail-value">{{ order.openTime }}</text>
               </view>
             </view>
             <view class="order-details">
               <view class="detail-row">
-                <text class="detail-label">奖金支持率</text>
+                <text class="detail-label">{{ t('options.labels.bonusRate') }}</text>
                 <text class="detail-value rate">{{ order.bonusRate }}</text>
               </view>
               <view class="detail-row">
-                <text class="detail-label">开仓价</text>
+                <text class="detail-label">{{ t('options.labels.openPrice') }}</text>
                 <text class="detail-value">{{ order.openPrice2 }}</text>
               </view>
               <view class="detail-row">
-                <text class="detail-label">开仓时间</text>
+                <text class="detail-label">{{ t('options.labels.openTime') }}</text>
                 <text class="detail-value">{{ order.openTime2 }}</text>
               </view>
             </view>
@@ -146,11 +146,11 @@
         <view class="action-buttons">
           <view class="action-btn rise" @click="handleRise">
             <image src="../../static/images/options/up-active.png" mode="widthFix" class="btn-icon" />
-            <text class="btn-text">上涨</text>
+            <text class="btn-text">{{ t('options.actions.rise') }}</text>
           </view>
           <view class="action-btn fall" @click="handleFall">
             <image src="../../static/images/options/down-active.png" mode="widthFix" class="btn-icon" />
-            <text class="btn-text">下跌</text>
+            <text class="btn-text">{{ t('options.actions.fall') }}</text>
           </view>
         </view>
       </view>
@@ -166,8 +166,12 @@ import { GridComponent, TooltipComponent, LegendComponent } from "echarts/compon
 import { CanvasRenderer } from "echarts/renderers";
 import LanguageToggle from "@/components/LanguageToggle.vue";
 
+import { useI18n } from '@/hooks/useI18n.js'
+
 // 注册 ECharts 组件
 echarts.use([CandlestickChart, LineChart, GridComponent, TooltipComponent, LegendComponent, CanvasRenderer]);
+
+const { t } = useI18n()
 
 // 当前交易对
 const currentPair = ref("BTCUSDT");
@@ -179,15 +183,15 @@ let chartInstance = null;
 
 // 时间周期配置
 const timePeriods = ref([
-  { label: "1分", value: 1, period: 4 },
-  { label: "5分", value: 5, period: 4 },
-  { label: "10m", value: 10, period: 4 },
-  { label: "15分", value: 15, period: 4 },
-  { label: "30分", value: 30, period: 4 },
-  { label: "1小时", value: 60, period: 4 },
-  { label: "4小时", value: 240, period: 4 },
-  { label: "日线", value: 0, period: 0 },
-  { label: "指数/价格", value: 0, period: 0 },
+  { key: '1m', value: 1, period: 4 },
+  { key: '5m', value: 5, period: 4 },
+  { key: '10m', value: 10, period: 4 },
+  { key: '15m', value: 15, period: 4 },
+  { key: '30m', value: 30, period: 4 },
+  { key: '1h', value: 60, period: 4 },
+  { key: '4h', value: 240, period: 4 },
+  { key: 'day', value: 0, period: 0 },
+  { key: 'indexPrice', value: 0, period: 0 },
 ]);
 const currentTimePeriod = ref(1);
 
@@ -198,8 +202,8 @@ const ma30Price1 = ref("111, 111.72");
 const ma30Price2 = ref("113, 260.26");
 
 // 时间周期按钮
-const periods = ref(["10分钟", "30分钟", "1小时", "1天"]);
-const currentPeriod = ref("10分钟");
+const periods = ref(['10m', '30m', '1h', '1d']);
+const currentPeriod = ref('10m');
 
 // 数量
 const quantity = ref(50);
@@ -453,8 +457,8 @@ onMounted(() => {
 
 // 订单标签页
 const orderTabs = ref([
-  { key: "open", label: "已开仓(0)" },
-  { key: "closed", label: "已平仓(20+)" },
+  { key: 'open' },
+  { key: 'closed' },
 ]);
 const currentOrderTab = ref("closed");
 
