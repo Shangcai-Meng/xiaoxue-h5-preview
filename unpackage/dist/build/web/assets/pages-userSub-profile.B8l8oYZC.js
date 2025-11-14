@@ -1,0 +1,1 @@
+import{b as e,w as s,i as r,o as a,e as o}from"./index-BS2xl3NC.js";import{_ as t}from"./_plugin-vue_export-helper.BCo6x5W8.js";const n=t({},[["render",function(t,n){const p=r;return a(),e(p,{class:"page"},{default:s(()=>[o("profile")]),_:1})}]]);export{n as default};
