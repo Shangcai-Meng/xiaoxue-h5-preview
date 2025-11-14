@@ -17,7 +17,7 @@
 
     <!-- 头部装饰图 - 绝对定位在顶部 -->
     <view class="hero-section">
-      <image class="hero-bg" src="../../static/images/news/hero-bg.png" mode="widthFix" />
+      <image class="hero-bg" src="../../static/images/news/detail-bg.png" mode="widthFix" />
     </view>
 
     <scroll-view scroll-y class="scroll-view" @scroll="handleScroll">
@@ -25,7 +25,7 @@
       <view class="navbar-placeholder"></view>
 
       <!-- 头部占位 -->
-      <view class="hero-placeholder"></view>
+      <!-- <view class="hero-placeholder"></view> -->
 
       <!-- 文章内容 -->
       <view class="article-container">
@@ -89,20 +89,14 @@ const article = ref({
   ]
 })
 
-// 页面加载时可以从路由参数获取文章ID并加载数据
 onMounted(() => {
-  // 这里可以根据路由参数加载文章详情
-  // const pages = getCurrentPages()
-  // const currentPage = pages[pages.length - 1]
-  // const id = currentPage.options.id
-  // loadArticleDetail(id)
+
 })
 </script>
 
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f5f5f5;
 }
 
 .scroll-view {
@@ -120,8 +114,7 @@ onMounted(() => {
   left: 0;
   top: 0;
   width: 100%;
-  height: 488rpx;
-  background: linear-gradient(180deg, #FFF5E6 0%, #FFECD0 100%);
+  height: 750rpx;
   overflow: hidden;
   z-index: 0;
   pointer-events: none;
@@ -143,7 +136,6 @@ onMounted(() => {
 
 /* 文章容器 */
 .article-container {
-  background: #fff;
   border-radius: 32rpx 32rpx 0 0;
   padding: 48rpx 32rpx;
   min-height: calc(100vh - 168rpx);
@@ -158,7 +150,7 @@ onMounted(() => {
 }
 
 .article-title {
-  font-size: 36rpx;
+  font-size: 38rpx;
   font-weight: 600;
   color: #333;
   line-height: 1.5;
@@ -195,7 +187,6 @@ onMounted(() => {
 
 .article-image {
   width: 100%;
-  border-radius: 16rpx;
 }
 </style>
 

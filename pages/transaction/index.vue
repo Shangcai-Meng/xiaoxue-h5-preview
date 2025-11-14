@@ -17,7 +17,7 @@
 
     <!-- 头部装饰图 - 绝对定位在顶部 -->
     <view class="hero-section">
-      <image class="hero-bg" src="../../static/images/news/hero-bg.png" mode="widthFix" />
+      <image class="hero-bg" src="../../static/images/transaction/hero-bg.png" mode="widthFix" />
     </view>
 
     <scroll-view scroll-y class="scroll-view" @scroll="handleScroll">
@@ -51,7 +51,11 @@
         >
           <view class="item-left">
             <view class="item-icon" :class="item.type === 'income' ? 'icon-income' : 'icon-expense'">
-              <text class="icon-symbol">{{ item.type === 'income' ? '$+' : '💧' }}</text>
+              <image
+                class="item-icon-img"
+                :src="item.type === 'income' ? incomeIcon : expenseIcon"
+                mode="aspectFill"
+              />
             </view>
             <view class="item-info">
               <text class="item-title">{{ item.title }}</text>
@@ -70,6 +74,9 @@
 <script setup>
 import { ref, computed } from 'vue'
 import LanguageToggle from '@/components/LanguageToggle.vue'
+
+const incomeIcon = '../../static/images/transaction/income-icon.png'
+const expenseIcon = '../../static/images/transaction/expense-icon.png'
 
 // 滚动距离
 const scrollTop = ref(0)
@@ -173,8 +180,7 @@ const filteredList = computed(() => {
   left: 0;
   top: 0;
   width: 100%;
-  height: 488rpx;
-  background: linear-gradient(180deg, #FFF5E6 0%, #FFECD0 100%);
+  height: 654rpx;
   overflow: hidden;
   z-index: 0;
   pointer-events: none;
@@ -202,28 +208,26 @@ const filteredList = computed(() => {
 .tab-wrapper {
   display: flex;
   background: #fff;
-  border-radius: 48rpx;
-  padding: 8rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  border-radius: 47rpx;
+  padding: 4rpx;
 }
 
 .tab-item {
   flex: 1;
-  height: 72rpx;
+  height: 94rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 40rpx;
+  border-radius: 47rpx;
   transition: all 0.3s;
 }
 
 .tab-item.active {
-  background: linear-gradient(135deg, #FF9D5C 0%, #FF7A3D 100%);
-  box-shadow: 0 4rpx 12rpx rgba(255, 125, 61, 0.3);
+  background: linear-gradient(90deg, #FC7F3F 0%, #FCCB36 100%);
 }
 
 .tab-text {
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: 500;
   color: #666;
   transition: color 0.3s;
@@ -244,30 +248,34 @@ const filteredList = computed(() => {
 
 .transaction-item {
   background: #fff;
-  border-radius: 24rpx;
-  padding: 32rpx;
+  border-radius: 16rpx;
+  padding: 28rpx;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
 }
 
 .item-left {
   display: flex;
   align-items: center;
-  column-gap: 24rpx;
+  column-gap: 15rpx;
   flex: 1;
   min-width: 0;
 }
 
 .item-icon {
-  width: 80rpx;
-  height: 80rpx;
+  width: 62rpx;
+  height: 62rpx;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.item-icon-img {
+  width: 62rpx;
+  height: 62rpx;
 }
 
 .icon-income {
@@ -299,29 +307,29 @@ const filteredList = computed(() => {
 }
 
 .item-title {
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 500;
-  color: #333;
+  color: #09132C;
 }
 
 .item-time {
   font-size: 24rpx;
-  color: #999;
+  color: #666;
 }
 
 .item-amount {
-  font-size: 32rpx;
+  font-size: 34rpx;
   font-weight: 600;
   flex-shrink: 0;
   margin-left: 24rpx;
 }
 
 .amount-income {
-  color: #FF5252;
+  color: #FB5954;
 }
 
 .amount-expense {
-  color: #00C9A7;
+  color: #24A980;
 }
 </style>
 

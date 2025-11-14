@@ -112,7 +112,7 @@ const handleNewsClick = (item) => {
 <style lang="scss" scoped>
 .page {
   min-height: 100vh;
-  background: #f5f5f5;
+  background: F7F7F7;
 }
 
 .scroll-view {
@@ -153,34 +153,36 @@ const handleNewsClick = (item) => {
 
 /* 新闻列表 */
 .news-list {
-  padding: 24rpx 32rpx;
+  padding: 24rpx 30rpx;
   display: flex;
   flex-direction: column;
-  row-gap: 24rpx;
+  row-gap: 20rpx;
+  margin-top: -88rpx;
 }
 
 .news-item {
   background: #fff;
-  border-radius: 24rpx;
-  padding: 32rpx;
+  border-radius: 16rpx;
+  padding: 30rpx 20rpx;
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: stretch;
   column-gap: 24rpx;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.04);
+  height: 210rpx;
+  box-sizing: border-box;
 }
 
 .news-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  row-gap: 16rpx;
+  justify-content: space-between;
   min-width: 0;
 }
 
 .news-title {
-  font-size: 28rpx;
-  font-weight: 500;
+  font-size: 30rpx;
+  font-weight: 600;
   color: #333;
   line-height: 1.5;
   display: -webkit-box;
@@ -192,12 +194,12 @@ const handleNewsClick = (item) => {
 
 .news-time {
   font-size: 24rpx;
-  color: #999;
+  color: #888;
 }
 
 .news-thumb {
-  width: 280rpx;
-  height: 200rpx;
+  width: 218rpx;
+  height: 144rpx;
   border-radius: 16rpx;
   flex-shrink: 0;
   background: #f0f0f0;
